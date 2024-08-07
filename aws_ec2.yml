@@ -3,7 +3,7 @@ regions:
   - us-east-1  # Replace with your AWS region
 filters:
   instance-state-name: running
-  tag:Name: tag_Name_vault
+  tag:Name: vault
 keyed_groups:
   - key: tags.Name
     prefix: tag_Name_  
