@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_CREDENTIALS_ID = 'aws_cred'  // AWS credentials ID
+        ANSIBLE_PLAYBOOK = 'vault.yml'  // Ansible playbook file
+        INVENTORY_FILE = 'aws_ec2.yml'  // Ansible inventory file
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Govindmahra/Ansible-hashicorpvault.git'
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${AWS_CREDENTIALS_ID}"]]) {
+                    sh '''
+                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+                        ansible-playbook ${ANSIBLE_PLAYBOOK} -i ${INVENTORY_FILE}
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
