@@ -1,0 +1,12 @@
+
+# defaults file for vault_role
+# vault_role/defaults/main.yml
+---
+vault_version: "1.17.0"
+vault_binary_url: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
+vault_install_dir: "/usr/bin/"
+vault_config_dir: "/etc/vault.d"
+vault_config_file: "vault.hcl"
+vault_data_dir: "/opt/vault/data"
+vault_service_name: "vault"
+

@@ -1,0 +1,6 @@
+---
+- hosts: tag_Name_vault
+  become: yes
+  roles:
+    - vault_role
+

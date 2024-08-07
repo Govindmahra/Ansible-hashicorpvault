@@ -1,0 +1,6 @@
+---
+# - name: Install and configure HashiCorp Vault
+- hosts: tag_Name_test-vault
+  become: yes
+  roles:
+    - vault_role

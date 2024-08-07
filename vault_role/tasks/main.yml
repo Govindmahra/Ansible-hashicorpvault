@@ -1,0 +1,160 @@
+--- # hasicorp vault installation 
+
+- name: Create Vault user 
+  user:
+    name: vault
+    system: yes
+    shell: /bin/bash  
+  tags: vault
+
+- name: Set password for Vault user 
+  lineinfile:
+    path: /etc/shadow
+    regexp: '^vault:'
+    line: '123'
+    state: present
+  tags: vault
+
+- name: Grant permissions to Vault user
+  file:
+    path: "{{ vault_install_dir }}"
+    owner: vault
+    group: vault
+    mode: '0755'
+  tags: vault
+
+- name: Create /opt/vault/data directory
+  file:
+    path: /opt/vault/data
+    state: directory
+    owner: vault
+    group: vault
+    mode: '0755'
+
+# - name: Create raft directory
+#   file:
+#     path: /tmp/raft
+#     state: directory
+#     owner: vault
+#     group: vault
+#     mode: '0755'
+
+
+- name: Download Vault binary
+  get_url:
+    url: "{{ vault_binary_url }}"
+    dest: "/tmp/vault.zip"
+    # update_cache: yes
+  tags: vault
+
+- name: Install unzip
+  apt:
+    name: unzip
+    state: present
+  
+- name: Unzip Vault binary
+  unarchive:
+    src: "/tmp/vault.zip"  
+    dest: "{{ vault_install_dir }}"
+    remote_src: yes
+
+- name: Ensure Vault directory exists
+  file:
+    path: "{{ vault_config_dir }}"
+    state: directory
+  tags: vault
+
+- name: Copy Vault service file using template
+  template:
+    src: "vault.service.j2"
+    dest: "/usr/lib/systemd/system/vault.service"
+    mode: '0644'
+  tags: vault
+  notify: restart_vault
+
+# - name: Restart Vault service if it is not active
+#   shell: systemctl restart vault.service
+#   become: yes
+
+# - name: Gather service facts
+#   service_facts:
+
+# - name: Print services # getting service facts from target
+#   debug:
+#     var: ansible_facts.services
+#   when:
+#     - ansible_os_family == 'Debian' and ansible_distribution == 'Ubuntu'  
+#   no_log: true
+
+- name: Create Vault configuration file
+  template:
+    src: "vault.hcl.j2"
+    dest: "{{ vault_config_dir }}/{{ vault_config_file }}"
+    owner: vault
+    group: vault
+  tags: vault
+  # daemon_reload: yes
+  notify: restart_vault
+  # when: ansible_facts.services['vault.service'].state == 'running'
+
+# - name: Create Vault raft file
+#   template:
+#     src: "{{ vault_config_dir }}/{{ vault_config_file }}"
+#     dest: "/opt/vault/data"
+#     owner: vault
+#     group: vault
+#   tags: vault
+
+# # # - name: Task with multiple conditions
+# # #   debug:
+# # #     msg: "Hello World!"
+# # #   when:
+# # #     - ansible_os_family == 'Debian' and ansible_distribution == 'Ubuntu'
+# # #     # - ansible_os_family == 'RedHat'
+# # #     - ansible_facts.services['vault.service'].state == 'running'
+
+# #   # notify: reload_vault 
+# # #   # when: (vault_operation == "install" or vault_operation == "update")
+
+# # # - name: Getting services from target
+# # #   ansible.builtin.service:
+
+# - name: Ensure Vault service is started and enabled
+#   systemd:
+#     name: "{{ vault_service_name }}"
+#     state: started
+#     enabled: yes
+#   tags: vault
+
+- name: Gather service facts
+  service_facts:
+
+- name: Print services # getting service facts from target
+  debug:
+    var: ansible_facts.services
+  # when:
+  #   - ansible_os_family == 'Debian' and ansible_distribution == 'Ubuntu'  
+  no_log: true
+
+# # #   when: 
+# # #     # - ansible_os_family == 'RedHat'
+# # #     - ansible_os_family == 'debian' and ansible_distribution == 'Ubuntu'
+# # #     - ansible_facts.services['vault.service'].state == 'running'
+
+
+# # # - name: Ensure Vault service is started and enabled
+# # #   systemd:
+# # #     name: "{{ vault_service_name }}"
+# # #     state: started
+# # #     enabled: yes
+# # #   tags: vault
+# # #   when: 
+# # #     - ansible_os_family == 'RedHat'
+# # #     # - ansible_os_family == 'redhat' and ansible_distribution == 'Ubuntu'
+# # #     - ansible_facts.services['vault.service'].state == 'running'
+
+# # # # #   when: (vault_operation == "install" or vault_operation == "update")
+
+
+
+

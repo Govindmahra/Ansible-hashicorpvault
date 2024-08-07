@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+# - hosts: tag_Name_test-vault
+  remote_user: root
+  roles:
+    - vault_role
+    

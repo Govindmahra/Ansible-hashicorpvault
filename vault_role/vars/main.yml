@@ -1,0 +1,6 @@
+
+# vault_role/vars/main.yml
+---
+vault_service_name: "vault"
+
+

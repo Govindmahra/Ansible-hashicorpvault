@@ -1,0 +1,12 @@
+# vault_role/handlers/main.yml
+---
+- name: restart_vault
+  service:
+    name: "{{ vault_service_name }}"
+    state: restarted
+
+- name: reload_vault
+  service:
+    name: "{{ vault_service_name }}"
+    state: restarted
+
