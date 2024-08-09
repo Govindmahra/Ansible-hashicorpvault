@@ -59,22 +59,7 @@ pipeline {
             }
         }
 
-        stage('Install AWS CLI') {
-            steps {
-                script {
-                    // Check if AWS CLI is installed
-                    def awsCliVersion = sh(script: 'aws --version', returnStatus: true)
-                    if (awsCliVersion != 0) {
-                        echo 'AWS CLI not found. Installing...'
-                        sh 'sudo snap install aws-cli --classic'
-                    } else {
-                        echo 'AWS CLI is already installed.'
-                    }
-                }
-            }
-        }
-
-        // stage('Attach IAM Policy') {
+       // stage('Attach IAM Policy') {
         //     steps {
         //         script {
         //             // Attach the policy to the role
@@ -84,50 +69,6 @@ pipeline {
         //         }
         //     }
         // }
-
-        stage('Checkout Ansible Code') {
-            steps {
-                git branch: 'main', url: "${ANSIBLE_REPO}"
-            }
-        }
-
-        stage('Copy Key and Ansible Code to Bastion Host') {
-            steps {
-                script {
-                    def bastionHost = env.BASTION_HOST
-                    def privateKeyFile = env.PRIVATE_KEY_FILE
-                    def bastionUser = env.BASTION_USER
-                    echo "Bastion Host IP for SCP: ${bastionHost}"
-
-                    if (!fileExists(privateKeyFile)) {
-                        error "Private key file not found: ${privateKeyFile}"
-                    }
-
-                    sh """
-                        scp -o StrictHostKeyChecking=no -i ${privateKeyFile} ${privateKeyFile} ${bastionUser}@${bastionHost}:/home/${bastionUser}/.ssh
-                        ssh -o StrictHostKeyChecking=no -i ${privateKeyFile} ${bastionUser}@${bastionHost} "
-                        export PATH=\$PATH:/home/ubuntu/.local/bin &&
-                        git clone ${ANSIBLE_REPO} /home/ubuntu/Ansible-hashicorpvault &&
-                        sudo apt-get update &&
-                        sudo apt-get install -y python3 python3-pip &&
-                        pip3 install --user boto boto3 botocore ansible"
-                    """
-                }
-            }
-        }
-
-        stage('Run Ansible Playbook') {
-            steps {
-                script {
-                    def bastionHost = env.BASTION_HOST
-                    echo "Bastion Host IP for Ansible Playbook: ${bastionHost}"
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no -i ${PRIVATE_KEY_FILE} ${BASTION_USER}@${BASTION_HOST} "
-                        /home/ubuntu/.local/bin/ansible-playbook /home/${BASTION_USER}/Ansible-hashicorpvault/${ANSIBLE_PLAYBOOK} -i /home/${BASTION_USER}/Ansible-hashicorpvault/${INVENTORY_FILE}"
-                    '''
-                }
-            }
-        }
     }
 
     post {
