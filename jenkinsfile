@@ -2,20 +2,8 @@ pipeline {
     agent any
 
     environment {
-        
-
-        AWS_CREDENTIALS_ID = 'aws_cred'                       // AWS credentials ID
-        TERRAFORM_REPO = 'https://github.com/Govindmahra/Hasicorp-vault.git' // Terraform repo URL
-        ANSIBLE_REPO = 'https://github.com/Govindmahra/Ansible-hashicorpvault.git' // Ansible repo URL
-        ANSIBLE_PLAYBOOK = 'vault.yml'                       // Ansible playbook file
-        INVENTORY_FILE = 'aws_ec2.yml'                       // Ansible inventory file
-        TERRAFORM_DIR = 'infra'                              // Directory where Terraform code is located
-        PRIVATE_KEY_FILE = '/var/lib/jenkins/infra/vault_key.pem' // Path to the private key file
-        BASTION_USER = 'ubuntu'                              // Bastion host user
-        POLICY_ARN = 'arn:aws:iam::448014237739:role' // Replace with your policy ARN
-        INSTANCE_PROFILE_ARN= 'arn:aws:iam::448014237739:instance-profile/cli'
-        ROLE_NAME = 'cli' // Your role name
-        AWS_REGION = 'us-east-1' // Replace with your AWS region if needed
+                AWS_CREDENTIALS_ID = 'aws_cred'                       // AWS credentials ID
+                AWS_REGION = 'us-east-1' // Replace with your AWS region if needed
     }
 
     stages {
