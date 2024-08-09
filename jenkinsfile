@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('govind_access_key')
-        AWS_SECRET_ACCESS_KEY = credentials('govind_secret_key')
+        
 
         AWS_CREDENTIALS_ID = 'aws_cred'                       // AWS credentials ID
         TERRAFORM_REPO = 'https://github.com/Govindmahra/Hasicorp-vault.git' // Terraform repo URL
