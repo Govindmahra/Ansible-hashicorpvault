@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # AWS credentials and configuration
-AWS_ACCESS_KEY="your_access_key_here"
-AWS_SECRET_KEY="your_secret_key_here"
-REGION="your_region_here"
+AWS_ACCESS_KEY="AKIAWQT52YAVZRXNCX5N"
+AWS_SECRET_KEY="jTtsRaaSGtGx/RuztsxANtbZIHxSRiDW21VQ9XhR"
+REGION="us-east-1"
 OUTPUT_FORMAT="json"
 
 # Update and install necessary packages
