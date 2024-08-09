@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # AWS credentials and configuration
-AWS_ACCESS_KEY="AKIAWQT52YAVZRXNCX5N"
-AWS_SECRET_KEY="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"
+AWS_ACCESS_KEY=""
+AWS_SECRET_KEY=""
 REGION="us-east-1"
 OUTPUT_FORMAT="json"
 
