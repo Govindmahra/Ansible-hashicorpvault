@@ -1,5 +1,5 @@
 ---
-- hosts: tag_Name_vault
+- hosts: tag_Environment_vault
   become: yes
   roles:
     - vault_role
