@@ -19,9 +19,9 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Terraform Code') {
+        stage('cloning repo') {
             steps {
-                git branch: 'main', url: "${TERRAFORM_REPO}"
+                git "https://github.com/Govindmahra/Hasicorp-vault.git"
             }
         }
 
