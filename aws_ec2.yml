@@ -1,17 +1,15 @@
----
 plugin: aws_ec2
 regions:
   - us-east-1  # Replace with your AWS region
-    #filters:
-    #instance-state-name: running
-    #tag:Name: vault
+filters:
+  instance-state-name: running
+#   # tag:Name: tag_Name_test-vault
 keyed_groups:
-  - key: tags.Environment
-    prefix: tag_Environment__
+  - key: tags.Name
+    prefix: tag_Name_  
     separator: ""
 hostnames:
-  - private-ip-address
+  - private-ip-address    
 compose:
-  ansible_host: private_ip_address
-  ansible_user: ubuntu
-~                      
+  ansible_host: public_ip_address
+  ansible_user: ubuntu                     
